@@ -1,0 +1,35 @@
+name: MERN CI
+
+on:
+  push:
+    branches: [main]
+      
+jobs:
+  mongo-init-test:
+    runs-on: ubuntu-latest
+
+    env:
+      PORT: ${{ secrets.PORT }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Seed MongoDB Atlas
+        working-directory: ./backend
+        run: node seedTasksData.js
+
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: npm test   

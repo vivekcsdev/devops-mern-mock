@@ -15,6 +15,7 @@ describe('GET api/tasks', () => {
     it('it should return array ok', async () => { // it should return array ok - test case name
         const res = await request(app).get('/api/tasks') // get the response data when i request api
         expect(Array.isArray(res.body)).toBe(true); // check if response data is array or not. like if(Array.isArray(responsedata)){}
+        console.log(res.body,'DATA SEEDED');
     })
 
     //suppose response return object like res.json({message:'Data received',tasks});.
