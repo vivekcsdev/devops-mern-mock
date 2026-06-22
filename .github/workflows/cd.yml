@@ -1,7 +1,7 @@
 name: MERN CD
 
 on:
-  push: 
+  push:
     branches: [main]
 
 jobs:
@@ -15,8 +15,20 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script: | 
-           cd devops-mern-mock/ 
-           git pull origin main
-           docker-compose down
-           docker-compose up --build -d
+          script: |
+            # Update Docker Compose to latest version
+            echo "Updating Docker Compose..."
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+           
+            # Verify version
+            docker-compose --version
+           
+            # Deploy application
+            cd devops-mern-mock/
+            git pull origin main
+            docker-compose down
+            docker-compose up --build -d
+           
+            # Check if containers are running
+            docker-compose ps
